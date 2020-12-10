@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.util.Log;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -37,6 +38,7 @@ class FlutterRealm {
         } else {
             builder.inMemory().name(inMemoryIdentifier);
         }
+        builder.schemaVersion(1000);
         RealmConfiguration config = builder.build();
 
         Realm.getInstance(config);
@@ -351,8 +353,13 @@ class FlutterRealm {
                 map.put(fieldName, value);
                 continue;
             }
+            if (object.getFieldType(fieldName) == RealmFieldType.OBJECT) {
+                DynamicRealmObject value = object.getObject(fieldName);
+                map.put(fieldName, objectToMap(value));
+                continue;
+            }
             Object value = object.get(fieldName);
-            map.put(fieldName, value);
+            map.put(fieldName, value;
         }
         return map;
     }
@@ -369,6 +376,11 @@ class FlutterRealm {
                 newValue.addAll((List) value);
                 value = newValue;
             }
+            
+            /*if (value instanceof Map) {
+                value=value;
+                // fieldName == nazwa klasy? chyba nie... to skąd ta nazwa?
+            }*/
             object.set(fieldName, value);
         }
     }

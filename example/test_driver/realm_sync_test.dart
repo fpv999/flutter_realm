@@ -106,7 +106,7 @@ void main() {
       await Future.delayed(Duration(seconds: 5));
 
       await client
-          .addProducts(products.map(((title) => Product(uuid.v4(), title))));
+          .addProducts(products.map(((title) => Product(uuid.v4(), title, 14))));
       await productsPage.hasProducts(products);
     });
   });

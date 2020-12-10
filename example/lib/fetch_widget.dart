@@ -34,7 +34,8 @@ class _FetchWidgetState extends State<FetchWidget> {
   }
 
   Future _onAdd(Product product) async {
-    await widget.realm.createObject('Product', product.toMap(withId: true));
+    final v = product.toMap(withId: true);
+    await widget.realm.createObject('Product', v);
     _fetchAll();
   }
 

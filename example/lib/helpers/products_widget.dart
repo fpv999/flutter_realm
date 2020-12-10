@@ -89,7 +89,7 @@ class ProductsWidget extends StatelessWidget {
       return;
     }
 
-    final updated = Product(product.uuid, title);
+    final updated = Product(product.uuid, title, 14);
     onEdit(updated);
   }
 
@@ -106,7 +106,7 @@ class ProductsWidget extends StatelessWidget {
         return;
       }
 
-      final product = Product(Uuid().v4(), title);
+      final product = Product(Uuid().v4(), title, 14);
       onAdd(product);
     };
   }

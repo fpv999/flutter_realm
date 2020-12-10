@@ -5,14 +5,14 @@ author: German Saprykin <saprykin.h@gmail.com>
 homepage: https://github.com/mogol/flutter_realm
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"  
 
 dependencies:
   flutter:
     sdk: flutter
-  uuid: ^2.0.1
+  uuid: ^2.2.2
   rxdart: ^0.22.0
-  meta: ^1.1.0
+  meta: ^1.2.4
 
 dev_dependencies:
   flutter_test:
