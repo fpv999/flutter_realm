@@ -359,7 +359,7 @@ class FlutterRealm {
                 continue;
             }
             Object value = object.get(fieldName);
-            map.put(fieldName, value;
+            map.put(fieldName, value);
         }
         return map;
     }
