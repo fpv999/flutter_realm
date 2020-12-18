@@ -157,6 +157,12 @@ class Realm {
     });
   }
 
+  Future deleteAll(String className) {
+    return _invokeMethod('deleteAllClassObjects', {
+      '\$': className,
+    });
+  }
+
   Future<String> filePath() => _invokeMethod('filePath');
 
   @override

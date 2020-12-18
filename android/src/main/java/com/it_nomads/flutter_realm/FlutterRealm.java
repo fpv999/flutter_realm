@@ -81,6 +81,19 @@ class FlutterRealm {
                     result.success(null);
                     break;
                 }
+                case "deleteAllClassObjects": {
+                    String className = (String) arguments.get("$");
+                    
+                    realm.beginTransaction();
+
+                    RealmResults<DynamicRealmObject> objects = realm.where(className).findAll();
+                    objects.deleteAllFromRealm();
+                    
+                    realm.commitTransaction();
+
+                    result.success(null);
+                    break;
+                }
                 case "deleteObject": {
                     String className = (String) arguments.get("$");
                     Object primaryKey = arguments.get("primaryKey");
@@ -145,7 +158,6 @@ class FlutterRealm {
                 case "objects": {
                     String className = (String) arguments.get("$");
                     List predicate = (List) arguments.get("predicate");
-
 
                     RealmResults<DynamicRealmObject> results = getQuery(realm.where(className), predicate).findAll();
                     List list = convert(results);
@@ -353,6 +365,11 @@ class FlutterRealm {
                 map.put(fieldName, value);
                 continue;
             }
+            if (object.getFieldType(fieldName) == RealmFieldType.BINARY_LIST) {
+                Object value = object.getList(fieldName, byte[].class);
+                map.put(fieldName, value);
+                continue;
+            }
             if (object.getFieldType(fieldName) == RealmFieldType.OBJECT) {
                 DynamicRealmObject value = object.getObject(fieldName);
                 map.put(fieldName, objectToMap(value));
@@ -371,7 +388,35 @@ class FlutterRealm {
             }
 
             Object value = map.get(fieldName);
+
+
+            //Log.d("FR","fieldName="+fieldName+" type="+object.getFieldType(fieldName));
+            if (object.getFieldType(fieldName) == RealmFieldType.BINARY_LIST) {
+                
+                //Log.d("FR","fieldName="+fieldName);
+                RealmList newValue = new RealmList<byte[]>();
+                ArrayList sl = (ArrayList)value;
+                for (int x=0;x<sl.size();x++) {
+                    ArrayList arr = (ArrayList)sl.get(x);
+                    byte[] b = new byte[arr.size()];
+                    for (int y=0;y<arr.size();y++) {
+                        b[y] = ((Integer)arr.get(y)).byteValue();
+                        //Log.d("FR","b["+Integer.toString(y)+"] = "+b[y]);
+                    }
+                    newValue.add(b);
+                }
+                value = newValue;
+                //Object value = object.getList(fieldName, byte[].class);
+
+                // conver list to BinaryByteArray
+                //map.put(fieldName, value);
+
+                object.set(fieldName, value);
+                continue;
+            }
+
             if (value instanceof List) {
+                //Log.d("FR","fieldName="+fieldName+" instanceof List");
                 RealmList newValue = new RealmList<>();
                 newValue.addAll((List) value);
                 value = newValue;
