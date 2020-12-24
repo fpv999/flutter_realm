@@ -101,7 +101,9 @@ class FlutterRealm {
 
                     DynamicRealmObject object = find(className, primaryKey);
                     realm.beginTransaction();
-                    object.deleteFromRealm();
+                    if (object != null) {
+                        object.deleteFromRealm();
+                    }
                     realm.commitTransaction();
 
                     result.success(null);
